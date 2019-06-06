@@ -6,3 +6,5 @@ results
 *.pyc
 *.o
 *.so
+blender.log
+
