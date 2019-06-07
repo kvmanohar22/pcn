@@ -1,10 +1,12 @@
 # Author: Wentao Yuan (wyuan1@cs.cmu.edu) 05/31/2018
 
+import sys
+sys.path.append("/home/kv/anaconda3/envs/py35/lib/python3.5/site-packages")
+
 import bpy
 import mathutils
 import numpy as np
 import os
-import sys
 import time
 
 # Usage: blender -b -P render_depth.py [ShapeNet directory] [model list] [output directory] [num scans per model]

@@ -7,7 +7,8 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-find_package(VTK 7.0 REQUIRED)
+find_package(VTK REQUIRED)
+# find_package(VTK 7.0 REQUIRED)
 include(${VTK_USE_FILE})
 
 add_executable (mesh_sampling mesh_sampling.cpp)

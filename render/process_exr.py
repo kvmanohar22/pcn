@@ -1,7 +1,7 @@
 # Author: Wentao Yuan (wyuan1@cs.cmu.edu) 05/31/2018
 
-import Imath
 import OpenEXR
+import Imath
 import argparse
 import array
 import numpy as np
@@ -44,7 +44,8 @@ if __name__ == '__main__':
     width = int(intrinsics[0, 2] * 2)
     height = int(intrinsics[1, 2] * 2)
 
-    for model_id in model_list:
+    for idx, model_id in enumerate(model_list):
+        print("{:3d}/{:3d}".format(idx, len(model_list)))
         depth_dir = os.path.join(args.output_dir, 'depth', model_id)
         pcd_dir = os.path.join(args.output_dir, 'pcd', model_id)
         os.makedirs(depth_dir, exist_ok=True)
