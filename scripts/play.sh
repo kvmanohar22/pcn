@@ -1,14 +1,15 @@
 cd /home/ankush/kv/pcn
 
 # Set the following variables
-MODEL_TYPE=pcn_emd
-LOG_DIR=log/${MODEL_TYPE}
-BATCH_SIZE=8
+MODEL_TYPE=pcn_cd
+LOG_DIR=log/play/${MODEL_TYPE}
+BATCH_SIZE=2
 NUM_INPUT_POINTS=3000
 NUM_GT_POINTS=16384
 STEPS_PER_PRINT=1
 
-export CUDA_VISIBLE_DEVICES=0
+rm -rf log/play/*
+export CUDA_VISIBLE_DEVICES=''
 python train.py \
    --lmdb_train data/shapenet_car/train.lmdb \
    --lmdb_valid data/shapenet_car/valid.lmdb \

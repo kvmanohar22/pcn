@@ -10,7 +10,8 @@ class Model:
         self.grid_size = 4
         self.grid_scale = 0.05
         self.num_fine = self.grid_size ** 2 * self.num_coarse
-        self.features = self.create_encoder(inputs, npts)
+        self.inputs = inputs
+        self.features = self.create_encoder(self.inputs, npts)
         self.coarse, self.fine = self.create_decoder(self.features)
         self.loss, self.update = self.create_loss(self.coarse, self.fine, gt, alpha)
         self.outputs = self.fine
