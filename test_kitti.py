@@ -32,7 +32,10 @@ def test(args):
     car_ids = [filename.split('.')[0] for filename in os.listdir(args.pcd_dir)]
     total_time = 0
     total_points = 0
+
+    print('Running on a total of ', len(car_ids), ' car ids for testing')
     for i, car_id in enumerate(car_ids):
+        print('Processing {:5d}/{:5d}'.format(i, len(car_ids)))
         partial = read_pcd(os.path.join(args.pcd_dir, '%s.pcd' % car_id))
         bbox = np.loadtxt(os.path.join(args.bbox_dir, '%s.txt' % car_id))
         total_points += partial.shape[0]
@@ -52,6 +55,7 @@ def test(args):
         partial = np.dot(partial, [[1, 0, 0], [0, 0, 1], [0, 1, 0]])
 
         start = time.time()
+
         completion = sess.run(model.outputs, feed_dict={inputs: [partial], npts: [partial.shape[0]]})
         total_time += time.time() - start
         completion = completion[0]

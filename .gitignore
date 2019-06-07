@@ -6,3 +6,6 @@ results
 *.pyc
 *.o
 *.so
+*.swp
+*.svg
+

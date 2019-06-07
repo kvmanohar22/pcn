@@ -52,4 +52,5 @@ if __name__ == '__main__':
     plot_pcd(ax, complete)
     ax.set_title('Output')
     plt.subplots_adjust(left=0, right=1, bottom=0, top=1, wspace=0)
-    plt.show()
+    plt.savefig("demo_data/{}.svg".format(args.input_path.split('/')[-1].split('.')[0]))
+
