@@ -1,3 +1,4 @@
-NUM_SCANS_PER_MODEL=10
+NUM_SCANS_PER_MODEL=8
 
-blender -b -P render/render_depth.py ${DATA_SHAPENET} lists/car.txt ${DATA_SHAPENET}/../pcn/my_data/car ${NUM_SCANS_PER_MODEL}
+TYPE=bus
+blender -b -P render/render_depth.py ${DATA_SHAPENET} lists/$TYPE.txt ${DATA_SHAPENET}/data/$TYPE ${NUM_SCANS_PER_MODEL}

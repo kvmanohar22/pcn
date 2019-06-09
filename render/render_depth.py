@@ -92,8 +92,8 @@ if __name__ == '__main__':
         sys.stdout.write('\r')
         percentage = (idx + 1.) / total_len
         done_len = int(percentage * bar_len)
-        args = [done_len*'=', (bar_len-done_len-1)*' ', percentage * 100]
-        sys.stdout.write('[{}>{}]{:.0f}%'.format(*args))
+        args = [done_len*'=', (bar_len-done_len-1)*' ', percentage * 100, idx+1, total_len]
+        sys.stdout.write('[{}>{}]{:.0f}% {:3d}/{:3d}'.format(*args))
         sys.stdout.flush()
 
         start = time.time()
