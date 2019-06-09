@@ -76,14 +76,33 @@ if __name__ == '__main__':
     with open(os.path.join(list_path)) as file:
         model_list = [line.strip() for line in file]
     open('blender.log', 'w+').close()
-    os.system('rm -rf %s' % output_dir)
+    # os.system('rm -rf %s' % output_dir)
+   
+    if os.path.exists(output_dir):
+        print("Output directory: {} exists!".format(output_dir))
+        ans = input("Do you want to proceed? (y/n): ")
+        if ans == 'n':
+            exit()
     os.makedirs(output_dir)
     np.savetxt(os.path.join(output_dir, 'intrinsics.txt'), intrinsics, '%f')
 
-    for model_id in model_list:
+    bar_len = 30
+    total_len = len(model_list)
+    for idx, model_id in enumerate(model_list):
+        sys.stdout.write('\r')
+        percentage = (idx + 1.) / total_len
+        done_len = int(percentage * bar_len)
+        args = [done_len*'=', (bar_len-done_len-1)*' ', percentage * 100]
+        sys.stdout.write('[{}>{}]{:.0f}%'.format(*args))
+        sys.stdout.flush()
+
         start = time.time()
         exr_dir = os.path.join(output_dir, 'exr', model_id)
         pose_dir = os.path.join(output_dir, 'pose', model_id)
+    
+        if os.path.exists(exr_dir):
+            continue
+        
         os.makedirs(exr_dir)
         os.makedirs(pose_dir)
 
@@ -120,4 +139,4 @@ if __name__ == '__main__':
         os.close(1)
         os.dup(old_os_out)
         os.close(old_os_out)
-        print('%s done, time=%.4f sec' % (model_id, time.time() - start))
+        # print('%s done, time=%.4f sec' % (model_id, time.time() - start))
