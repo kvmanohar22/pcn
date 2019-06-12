@@ -1,5 +1,8 @@
 # Author: Wentao Yuan (wyuan1@cs.cmu.edu) 05/31/2018
 
+import matplotlib
+matplotlib.use('Agg')
+
 import argparse
 import datetime
 import importlib
@@ -81,24 +84,12 @@ def train(args):
         ids, inputs, npts, gt = next(train_gen)
         start = time.time()
         feed_dict = {inputs_pl: inputs, npts_pl: npts, gt_pl: gt, is_training_pl: True}
-        _, loss, summary, coarse, fine, __inputs, __features = sess.run([train_op, model.loss, train_summary, model.coarse, model.fine, model.inputs, model.features], feed_dict=feed_dict)
+        _, loss, summary  = sess.run([train_op, model.loss, train_summary], feed_dict=feed_dict)
         total_time += time.time() - start
         writer.add_summary(summary, step)
         if step % args.steps_per_print == 0:
             print('epoch %d  step %d  loss %.8f - time per batch %.4f' %
                   (epoch, step, loss, total_time / args.steps_per_print))
-            print('-'*15) 
-            print('ids: ', ids.shape) 
-            print('inputs: ', inputs.shape) 
-            print('npts: ', npts.shape) 
-            print('gt: ', gt.shape) 
-            print('>>> ids val: ', ids) 
-            print('>>> npts: ', npts) 
-            print('>>> inputs: ', __inputs.shape) 
-            print('>>> features: ', __features.shape) 
-            print('>>> coarse: ', coarse.shape) 
-            print('>>> fine: ', fine.shape) 
-            print('-'*15) 
             total_time = 0
         if step % args.steps_per_eval == 0:
             print(colored('Testing...', 'grey', 'on_green'))

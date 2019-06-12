@@ -4,6 +4,9 @@ import numpy as np
 import tensorflow as tf
 from tensorpack import dataflow
 
+from io_util import save_pcd
+import os
+from os.path import join
 
 def resample_pcd(pcd, n):
     """Drop or duplicate points so that pcd has exactly n points"""
@@ -93,3 +96,47 @@ def get_queued_data(generator, dtypes, shapes, queue_capacity=10):
     queue_runner = tf.contrib.training.FeedingQueueRunner(queue, [enqueue_op], close_op, feed_fns=[feed_fn])
     tf.train.add_queue_runner(queue_runner)
     return queue.dequeue()
+
+
+def save_batch_data(ids, inputs, gt):
+   for _id, _inputs, _gt in zip(ids, inputs, gt):
+      model_id = _id.split('_')[1]
+      dir_name = join(os.getenv("BASE_ROOT"), model_id)
+      if os.path.exists(dir_name):
+         n_files = len(os.listdir(dir_name))-1
+         save_pcd(join(dir_name, "{}.pcd".format(n_files)), _inputs)
+      else:
+         os.makedirs(dir_name)
+         save_pcd(join(dir_name, "0.pcd"), _inputs)
+         save_pcd(join(dir_name, "GT.pcd"), _gt)
+
+def reshape_data(_npts, _inputs):
+   inputs = []
+   begin = 0
+   for ii in _npts:
+      end = begin + ii 
+      _input = _inputs[0, begin:end, :] 
+      inputs.append(_input)
+      begin = end 
+   assert len(inputs) == len(_npts)
+   return inputs
+
+
+if __name__ == '__main__':
+    input_size = 3000
+    output_size = 16384
+    lmdb_path = "/home/ankush/kv/pcn/data/shapenet_car/valid.lmdb"
+    df = dataflow.LMDBSerializer.load(lmdb_path, shuffle=False)
+    size = df.size()
+    df = dataflow.LocallyShuffleData(df, buffer_size=7000)
+    df = dataflow.PrefetchData(df, nr_prefetch=2, nr_proc=1)
+    df = BatchData(df, 2, input_size, output_size)
+    data_gen = df.get_data()
+
+    count = 0
+    while count <= size:
+        ids, inputs, npts, gt = next(data_gen)
+        inputs = reshape_data(npts, inputs)
+        count += len(ids)
+        save_batch_data(ids, inputs, gt)   
+        print("{:5d}/{:5d}: inputs: ({}) npts: ({}) gt: ({}), n[0]: {}, i[0]: {}".format(count, size, inputs[0].shape, npts.shape, gt.shape, npts[0], ids[0]))

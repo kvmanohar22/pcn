@@ -1,7 +1,7 @@
 __pycache__
 .vscode
 build
-log
+log*
 results
 *.pyc
 *.o
@@ -9,4 +9,5 @@ results
 *.swp
 *.svg
 blender.log
+demo_data/frame*
 

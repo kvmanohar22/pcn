@@ -65,9 +65,8 @@ def test(args):
         pcd_path = os.path.join(args.results_dir, 'completions', '%s.pcd' % car_id)
         save_pcd(pcd_path, completion_w)
 
-        if i % args.plot_freq == 0:
-            plot_path = os.path.join(args.results_dir, 'plots', '%s.png' % car_id)
-            plot_pcd_three_views(plot_path, [partial, completion], ['input', 'output'],
+        plot_path = os.path.join(args.results_dir, 'plots', '%s.png' % car_id)
+        plot_pcd_three_views(plot_path, [partial, completion], ['input', 'output'],
                                  '%d input points' % partial.shape[0], [5, 0.5])
     print('Average # input points:', total_points / len(car_ids))
     print('Average time:', total_time / len(car_ids))
